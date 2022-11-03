@@ -35,7 +35,7 @@
 
 Проверка методов:
 1. Внести данные.
-url: [post] {host}/action
+	url: [post] {host}/action
 Пример тела запроса:
 [
 	{"1": "value1"},
@@ -49,3 +49,36 @@ url: [post] {host}/action
 	url первые две : [get] {host}/action?method=take&count=2
 Пропустить count используется параметр skip
 	url пропустить одну : [get] {host}/action?method=skip&count=1
+
+
+Тестовое задание 2
+Даны таблицы:
+Clients - клиенты
+(
+	Id bigint, -- Id клиента
+	ClientName nvarchar(200) -- Наименование клиента
+);
+ClientContacts - контакты клиентов
+(
+	Id bigint, -- Id контакта
+	ClientId bigint, -- Id клиента
+	ContactType nvarchar(255), -- тип контакта
+	ContactValue nvarchar(255) --  значение контакта
+);
+1.	Написать запрос, который возвращает наименование клиентов и кол-во контактов клиентов
+2.	Написать запрос, который возвращает список клиентов, у которых есть более 2 контактов
+
+Решение:
+1. SQL запрос, который возвращает наименование клиентов и кол-во контактов клиентов
+SELECT C.ClientName, count(CC.Id) FROM Clients AS C
+	INNER JOIN ClientContacts as CC
+	ON C.ID  CC.ClientId
+	GROUP BY	(CC.ClientId)
+
+	
+2. SQL запрос, который возвращает список клиентов, у которых есть более 2 контактов
+SELECT C.Id, C.ClientName, FROM Clients AS C
+	INNER JOIN ClientContacts as CC
+	ON C.ID  CC.ClientId
+	GROUP BY (CC.ClientId)
+	HAVING (count(CC.Id)>2)
