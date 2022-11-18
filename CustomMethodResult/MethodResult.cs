@@ -1,6 +1,6 @@
 ﻿namespace CustomMethodResult
 {
-    class MethodResult<T>:IMethodResult<T>
+    public class MethodResult<T>:IMethodResult<T>
     {
         public bool Success { get; set; }
         public string Message { get; set; }
