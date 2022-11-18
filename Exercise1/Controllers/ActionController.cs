@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CustomMethodResult;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace Exercise1.Controllers
@@ -7,9 +8,9 @@ namespace Exercise1.Controllers
     [ApiController]
     public class ActionController : ControllerBase
     {
-        private readonly IActionBusiness actionBusiness;
+        private readonly IActionBusiness<List<Storage>> actionBusiness;
 
-        public ActionController(IActionBusiness actionBusiness)
+        public ActionController(IActionBusiness<List<Storage>> actionBusiness)
         {
             this.actionBusiness = actionBusiness;
         }
@@ -17,7 +18,7 @@ namespace Exercise1.Controllers
         [HttpGet()]
         public IActionResult Get(string method = "all", int count = 1)
         {
-            IMethodResult result = actionBusiness.Get(method, count);
+            IMethodResult<List<Storage>> result = actionBusiness.Get(method, count);
 
             if (result.Success)
                 return Ok(result.Data);
@@ -27,7 +28,7 @@ namespace Exercise1.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] List<Dictionary<string, string>> prams)
         {
-            IMethodResult result = actionBusiness.PostAsync(prams).Result;
+            IMethodResult<List<Storage>> result = actionBusiness.PostAsync(prams).Result;
 
             if (result.Success)
                 return Ok();

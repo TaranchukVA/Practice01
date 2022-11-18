@@ -1,10 +1,10 @@
-﻿namespace Exercise1
+﻿namespace CustomMethodResult
 {
-    public class MethodResult : IMethodResult
+    public class MethodResult<T>:IMethodResult<T>
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-        public object Data { get; set; }
+        public T Data { get; set; }
 
         public MethodResult(bool success = false)
         {
@@ -15,7 +15,7 @@
         {
             Message = message;
         }
-        public MethodResult(object data, string message = null, bool success = false) : this(message, success)
+        public MethodResult(T data, string message = null, bool success = false) : this(message, success)
         {
             Data = data;
         }
