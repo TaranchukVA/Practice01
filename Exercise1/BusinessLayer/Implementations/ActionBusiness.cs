@@ -4,10 +4,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using CustomMethodResult;
 
 namespace Exercise1
 {
-    public class ActionBusiness : IActionBusiness
+    public class ActionBusiness : IActionBusiness<List<Storage>>
     {
         private readonly DbContextOptions<SortDb> options;
         private readonly IMyLogger myLogger;
@@ -17,29 +18,29 @@ namespace Exercise1
             this.options = options;
             myLogger = new MyLogger(options);
         }
-        public async Task<IMethodResult> PostAsync(List<Dictionary<string, string>> rawData)
+        public async Task<IMethodResult<List<Storage>>> PostAsync(List<Dictionary<string, string>> rawData)
         {
             try
             {
                 var data = Read(rawData);
 
-                var result = Operation(data);
+                List<Storage> result = Operation(data);
 
                 await SaveAsync(result, options);
 
                 string text = JsonConvert.SerializeObject(result);
                 myLogger.Info($"Inserted: \t{text}");
-                return new MethodResult(true);
+                return new MethodResult<List<Storage>>(true);
             }
             catch (Exception exception)
             {
                 myLogger.Error(exception.Message);
-                return new MethodResult(exception.Message);
+                return new MethodResult<List<Storage>>(exception.Message);
             }
 
         }
 
-        public IMethodResult Get(string method, int count)
+        public IMethodResult<List<Storage>> Get(string method, int count)
         {
             try
             {
@@ -57,12 +58,12 @@ namespace Exercise1
 
                 string text = JsonConvert.SerializeObject(data);
                 myLogger.Info($"Selected:\t{text}");
-                return new MethodResult(data, success: true);
+                return new MethodResult<List<Storage>>(data, success: true);
             }
             catch (Exception exception)
             {
                 myLogger.Error(exception.Message);
-                return new MethodResult(exception.Message);
+                return new MethodResult<List<Storage>>(exception.Message);
             }
         }
 
@@ -85,7 +86,7 @@ namespace Exercise1
         {
             int order = 0;
             return data.OrderBy(item => item.code)
-                .Select(item => new Storage() { Order = ++order, Code = item.code, Value = item.value })
+                .Select((item) => new Storage() { Order = ++order, Code = item.code, Value = item.value })
                 .ToList();
         }
 

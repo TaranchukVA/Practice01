@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace Exercise1
 {
@@ -24,7 +25,7 @@ namespace Exercise1
 
             services.AddDbContext<SortDb>(options => options.UseNpgsql(configuration.GetConnectionString(SortDb.ConnectionString)));
 
-            services.AddTransient<IActionBusiness, ActionBusiness>();
+            services.AddTransient<IActionBusiness<List<Storage>>, ActionBusiness>();
 
         }
 
